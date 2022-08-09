@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Cookie;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,3 +17,20 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('home');
 });
+
+//Route::prefix('dashboard')->middleware(['auth', 'verified'])->name('dashboard.')->group(function () {
+ //   Route::get('/home', function () {
+ //       return view('home');
+ //   });
+//});
+
+Route::get('/home', function () {
+    return view('home');
+})->name('home')->middleware(['auth', 'verified']);
+
+
+Route::get('/register-retry', function(){
+    // Chrome F12 Headers - my_first_application_session=eyJpdiI6ImNnRH...
+    Cookie::queue(Cookie::forget(strtolower(str_replace(' ', '_', config('app.name'))) . '_session')); // Delete the cookie
+    return redirect('/');
+ });
